@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Recipes</h1>
+<table id="owners" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Description</th>
+        <th>Prep Time</th>
+        <th>Total Time</th>
+        <th>Servings</th>
+        <th>Source</th>
+        <th>Categories</th>
+        <th>Difficulty</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="recipe : ${recipes}">
+        <td th:text="${recipe.description}"/>
+        <td th:text="${recipe.prepTime}"/>
+        <td th:text="${recipe.cookTime}"/>
+        <td th:text="${recipe.servings}"/>
+        <td>
+            <a th:href="@{__${recipe.url}__}" th:text="${recipe.source}"/></a>
+        </td>
+        <td><span th:text="${#strings.listJoin(recipe.categories, ', ')}"/></td>
+        <td><span th:text="${recipe.difficulty}"/></td>
+    </tr>
+    </tbody>
+    </table>
+</body>
+</html>
