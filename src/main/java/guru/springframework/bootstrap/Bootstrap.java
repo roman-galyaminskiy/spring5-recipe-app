@@ -7,6 +7,7 @@ import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.HashSet;
 
+@Slf4j
 @Component
 public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> { // implements CommandLineRunner
     private final CategoryRepository categoryRepository;
@@ -40,7 +42,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> { /
             e.printStackTrace();
             System.exit(1);
         }
-        System.out.println("Bootstrap finished!");
+        log.info("Bootstrap finished!");
     }
 
     private Recipe getGuacoRecipe() throws IOException {
