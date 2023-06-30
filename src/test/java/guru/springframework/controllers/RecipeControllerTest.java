@@ -42,9 +42,9 @@ class RecipeControllerTest {
     void testMockMVC() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        mockMvc.perform(get("/recipes"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipes/index"));
+                .andExpect(view().name("index"));
     }
 
     @Test
@@ -62,7 +62,7 @@ class RecipeControllerTest {
         String viewName = recipeController.recipes(model);
 
         // then
-        assertEquals(viewName, "recipes/index");
+        assertEquals(viewName, "index");
         verify(recipeService, times(1)).findAll();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
         Set<Recipe> setInController = argumentCaptor.getValue();
