@@ -1,72 +1,85 @@
 package guru.springframework.controllers;
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.services.RecipeService;
-import org.junit.jupiter.api.BeforeEach;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(RecipeController.class)
 class RecipeControllerTest {
 
-    @Mock
+    @MockBean
     RecipeService recipeService;
 
-    RecipeController recipeController;
-
-    @Mock
-    Model model;
-
-    @BeforeEach
-    void setup() {
-        recipeController = new RecipeController(recipeService);
-    }
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
-    void testMockMVC() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+    public void getRecipeById() throws Exception {
+        var recipeId = 1L;
+        var recipe = new Recipe();
+        recipe.setId(recipeId);
 
-        mockMvc.perform(get("/"))
+        when(recipeService.findById(recipeId)).thenReturn(recipe);
+
+        mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                .andExpect(view().name("/recipe/show"))
+                .andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(recipeId))));
     }
 
     @Test
-    void recipes() {
-        // given
-        Set<Recipe> recipes = new HashSet<>();
-        recipes.add(new Recipe());
-        recipes.add(new Recipe());
-
-        when(recipeService.findAll()).thenReturn(recipes);
-
-        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
-
-        // when
-        String viewName = recipeController.recipes(model);
-
-        // then
-        assertEquals(viewName, "index");
-        verify(recipeService, times(1)).findAll();
-        verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        Set<Recipe> setInController = argumentCaptor.getValue();
-
-        assertEquals(2, setInController.size());
+    public void getNewRecipeForm() throws Exception {
+        mockMvc.perform(get("/recipe/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/form"))
+                .andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(nullValue()))));
     }
+
+    @Test
+    public void getExistingRecipeForm() throws Exception {
+        var recipeId = 1L;
+        var command = new RecipeCommand();
+        command.setId(recipeId);
+
+        when(recipeService.findCommandById(recipeId)).thenReturn(command);
+
+        mockMvc.perform(get("/recipe/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/form"))
+                .andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(recipeId))));
+    }
+
+    @Test
+    public void postRecipeForm() throws Exception {
+        var recipeId = 1L;
+        var recipe = new Recipe();
+        recipe.setId(recipeId);
+
+        when(recipeService.saveRecipeCommand(any())).thenReturn(recipe);
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "1")
+                .param("description", "test")
+        )
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name("redirect:/recipe/1/show"));
+
+    }
+
 }
