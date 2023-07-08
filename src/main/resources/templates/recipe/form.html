@@ -4,18 +4,18 @@
   <meta charset="UTF-8"/>
   <title>Recipe Form</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"
-        th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+        th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
 </head>
 <body>
-<!--/*@thymesVar id="recipe" type="guru.springframework.entities.Recipe"*/-->
+<!--/*@thymesVar id="recipe" type="guru.springframework.dto.RecipeDTO"*/-->
 <div class="container-fluid" style="margin-top: 20px">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <form  th:object="${recipe}" th:action="@{/recipe/}"  method="post">
         <input type="hidden" th:field="*{id}"/>
-        <div class="pannel-group">
+        <div class="panel-group">
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h1 class="panel-title">Edit Recipe Information</h1>
@@ -32,16 +32,22 @@
                   <label>Categories:</label>
                 </div>
                 <div class="col-md-9 form-group">
-                  <div class="radio">
+                  <div th:remove="all" class="radio">
                     <label>
                       <input type="checkbox" value=""/>
                       Cat 1
                     </label>
                   </div>
-                  <div class="radio" th:remove="all">
+                  <div th:remove="all" class="radio">
                     <label>
                       <input type="checkbox" value=""/>
                       Cat 2
+                    </label>
+                  </div>
+                  <div th:each="category : *{categories}" class="radio">
+                    <label>
+                      <input type="checkbox" value=""/>
+                      <span th:text="${category.description}">Cat 3</span>
                     </label>
                   </div>
                 </div>
@@ -97,7 +103,7 @@
                   <ul>
                     <li th:remove="all">1 Cup of milk</li>
                     <li th:remove="all">1 Teaspoon of chocolate</li>
-                    <li th:each="ingredient : ${recipe.ingredients}"
+                    <li th:each="ingredient : *{ingredients}"
                         th:text="${(ingredient.getAmount() +
                                         ' ' + ingredient.unitOfMeasure.getDescription() +
                                         ' - ' + ingredient.getDescription())}">1 Teaspoon of Sugar
@@ -137,9 +143,12 @@
   </div>
 </div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"
-        th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-        th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"-->
+<!--        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"-->
+<!--        crossorigin="anonymous"-->
+<!--        th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>-->
+<script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </html>

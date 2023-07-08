@@ -1,6 +1,6 @@
 package guru.springframework.services.impl;
 
-import guru.springframework.domain.Recipe;
+import guru.springframework.entities.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,5 +39,15 @@ class RecipeServiceImplTest {
 
         assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
+    }
+
+    @Test
+    void deleteById() {
+        long id = 1L;
+        recipeService.deleteById(id);
+
+        // no when since method returns null
+
+        verify(recipeRepository, times(1)).deleteById(id);
     }
 }

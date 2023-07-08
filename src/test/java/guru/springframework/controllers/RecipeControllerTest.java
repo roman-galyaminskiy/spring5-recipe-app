@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -78,7 +78,20 @@ class RecipeControllerTest {
                         .param("description", "test")
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/1/show"));
+                .andExpect(view().name("redirect:/recipe/" + recipeId + "/show"));
+    }
+
+    @Test
+    public void deleteRecipe() throws Exception {
+        var recipeId = 1L;
+        var dto = new RecipeDTO();
+        dto.setId(recipeId);
+
+        mockMvc.perform(get("/recipe/" + recipeId + "/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        verify(recipeService, times(1)).deleteById(anyLong());
     }
 
 }

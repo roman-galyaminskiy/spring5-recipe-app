@@ -1,7 +1,7 @@
 package guru.springframework.services;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Recipe;
+import guru.springframework.dto.RecipeDTO;
+import guru.springframework.entities.Recipe;
 
 import java.util.Set;
 
@@ -9,7 +9,9 @@ public interface RecipeService {
     Set<Recipe> findAll();
 
     Recipe findById(Long id);
-    Recipe saveRecipeCommand(RecipeCommand command);
+    Recipe saveRecipeDto(RecipeDTO dto);
 
-    RecipeCommand findCommandById(Long id);
+    RecipeDTO getDtoById(Long id);
+
+    void deleteById(Long id);
 }

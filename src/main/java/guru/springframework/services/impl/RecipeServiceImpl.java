@@ -1,7 +1,7 @@
 package guru.springframework.services.impl;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Recipe;
+import guru.springframework.dto.RecipeDTO;
+import guru.springframework.entities.Recipe;
 import guru.springframework.mappers.RecipeMapper;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.RecipeService;
@@ -34,15 +34,20 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe saveRecipeCommand(RecipeCommand command) {
-        return recipeRepository.save(mapper.commandToEntity(command));
+    public Recipe saveRecipeDto(RecipeDTO dto) {
+        return recipeRepository.save(mapper.dtoToEntity(dto));
     }
 
     @Override
-    public RecipeCommand findCommandById(Long id) {
+    public RecipeDTO getDtoById(Long id) {
         return recipeRepository.findById(id)
-                .map(recipe -> RecipeMapper.INSTANCE.entityToCommand(recipe))
+                .map(recipe -> RecipeMapper.INSTANCE.entityToDto(recipe))
                 .orElseThrow(() -> new RuntimeException("Recipe not found!"));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        recipeRepository.deleteById(id);
     }
 }
 ;
