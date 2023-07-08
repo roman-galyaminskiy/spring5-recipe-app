@@ -70,7 +70,7 @@ class RecipeMapperTest {
                 .builder()
                 .id(1L)
                 .amount(BigDecimal.ONE)
-                .unitOfMeasure(new UnitOfMeasureDTO(1L, "Test unit"))
+                .uomId(1L)
                 .description("Test ingredient")
                 .build();
 

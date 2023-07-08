@@ -42,7 +42,7 @@ class RecipeServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void testDeleteById() {
         long id = 1L;
         recipeService.deleteById(id);
 

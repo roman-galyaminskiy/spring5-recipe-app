@@ -13,7 +13,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public final class IngredientDTO {
     private Long id;
+
+    private Long recipeId;
     private String description;
     private BigDecimal amount;
-    private UnitOfMeasureDTO unitOfMeasure;
+    private Long uomId;
 }
