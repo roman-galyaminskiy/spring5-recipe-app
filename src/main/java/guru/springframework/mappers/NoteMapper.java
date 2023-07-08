@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.NoteCommand;
-import guru.springframework.domain.Note;
+import guru.springframework.dto.NoteDTO;
+import guru.springframework.entities.Note;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,7 +10,7 @@ public interface NoteMapper {
 
     NoteMapper INSTANCE = Mappers.getMapper( NoteMapper.class );
 
-    NoteCommand entityToCommand(Note entity);
+    NoteDTO entityToDto(Note entity);
 
-    Note commandToEntity(NoteCommand command);
+    Note dtoToEntity(NoteDTO dto);
 }

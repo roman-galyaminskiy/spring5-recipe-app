@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.NoteCommand;
-import guru.springframework.domain.Note;
+import guru.springframework.dto.NoteDTO;
+import guru.springframework.entities.Note;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ class NoteMapperTest {
     NoteMapper mapper = NoteMapper.INSTANCE;
 
     static Note note;
-    static NoteCommand noteCommand;
+    static NoteDTO noteDTO;
 
     @BeforeEach
     void setUp() {
@@ -22,7 +22,7 @@ class NoteMapperTest {
                 .recipeNotes("Test note")
                 .build();
 
-        noteCommand = NoteCommand
+        noteDTO = NoteDTO
                 .builder()
                 .id(1L)
                 .recipeNotes("Test note")
@@ -30,16 +30,16 @@ class NoteMapperTest {
     }
 
     @Test
-    void entityToCommand() {
-        NoteCommand result = mapper.entityToCommand(note);
+    void entityToDto() {
+        NoteDTO result = mapper.entityToDto(note);
         assertEquals(result.getId(), note.getId());
         assertEquals(result.getRecipeNotes(), note.getRecipeNotes());
     }
 
     @Test
-    void commandToEntity() {
-        Note result = mapper.commandToEntity(noteCommand);
-        assertEquals(result.getId(), noteCommand.getId());
-        assertEquals(result.getRecipeNotes(), noteCommand.getRecipeNotes());
+    void dtoToEntity() {
+        Note result = mapper.dtoToEntity(noteDTO);
+        assertEquals(result.getId(), noteDTO.getId());
+        assertEquals(result.getRecipeNotes(), noteDTO.getRecipeNotes());
     }
 }

@@ -1,7 +1,7 @@
 package guru.springframework.controllers;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Recipe;
+import guru.springframework.dto.RecipeDTO;
+import guru.springframework.entities.Recipe;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,22 +27,22 @@ public class RecipeController {
 
     @GetMapping("/new")
     String newRecipe(Model model) {
-        model.addAttribute("recipe", new RecipeCommand());
+        model.addAttribute("recipe", new RecipeDTO());
         return "/recipe/form";
     }
 
     @GetMapping({"/{recipeId}/update"})
     String updateRecipe(@PathVariable(name = "recipeId") Long id, Model model) {
-        var command = recipeService.findCommandById(id);
-        log.info(command.toString());
-        model.addAttribute("recipe", command);
+        var dto = recipeService.getDtoById(id);
+        log.info(dto.toString());
+        model.addAttribute("recipe", dto);
         return "/recipe/form";
     }
 
     @PostMapping(path = {"/", ""})
-    String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+    String saveOrUpdate(@ModelAttribute RecipeDTO dto) {
         log.info("saveOrUpdate");
-        Recipe recipe = recipeService.saveRecipeCommand(command);
+        Recipe recipe = recipeService.saveRecipeDto(dto);
         log.info("redirect:/recipe/" + recipe.getId() + "/show");
         return "redirect:/recipe/" + recipe.getId() + "/show";
     }

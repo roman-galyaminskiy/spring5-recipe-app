@@ -1,4 +1,4 @@
-package guru.springframework.domain;
+package guru.springframework.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,12 +47,12 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Note note;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe", fetch = FetchType.LAZY)
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @Enumerated(value = EnumType.STRING)
     private Difficulty difficulty;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
 }

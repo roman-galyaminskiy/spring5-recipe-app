@@ -1,4 +1,4 @@
-package guru.springframework.domain;
+package guru.springframework.entities;
 
 import lombok.*;
 
@@ -10,11 +10,15 @@ import jakarta.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnitOfMeasure {
+public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String description;
+    @OneToOne
+    private Recipe recipe;
+
+    @Column(columnDefinition = "TEXT")
+    private String recipeNotes;
 }

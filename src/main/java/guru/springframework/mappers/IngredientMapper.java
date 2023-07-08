@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.IngredientCommand;
-import guru.springframework.domain.Ingredient;
+import guru.springframework.dto.IngredientDTO;
+import guru.springframework.entities.Ingredient;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,7 +10,7 @@ public interface IngredientMapper {
 
     IngredientMapper INSTANCE = Mappers.getMapper( IngredientMapper.class );
 
-    IngredientCommand entityToCommand(Ingredient entity);
+    IngredientDTO entityToDto(Ingredient entity);
 
-    Ingredient commandToEntity(IngredientCommand command);
+    Ingredient dtoToEntity(IngredientDTO dto);
 }

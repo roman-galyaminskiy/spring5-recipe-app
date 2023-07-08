@@ -1,4 +1,4 @@
-package guru.springframework.commands;
+package guru.springframework.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public final class CategoryCommand {
+public final class UnitOfMeasureDTO {
     private Long id;
     private String description;
 }

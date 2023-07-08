@@ -1,4 +1,4 @@
-package guru.springframework.commands;
+package guru.springframework.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,9 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 @AllArgsConstructor
-public final class IngredientCommand {
+public final class IngredientDTO {
     private Long id;
     private String description;
     private BigDecimal amount;
-    // private RecipeCommand recipe;
-    private UnitOfMeasureCommand unitOfMeasure;
+    private UnitOfMeasureDTO unitOfMeasure;
 }

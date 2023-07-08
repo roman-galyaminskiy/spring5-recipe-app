@@ -1,6 +1,6 @@
 package guru.springframework.repositories;
 
-import guru.springframework.domain.UnitOfMeasure;
+import guru.springframework.entities.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

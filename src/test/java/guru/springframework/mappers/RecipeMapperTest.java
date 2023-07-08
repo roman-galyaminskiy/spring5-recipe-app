@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.*;
-import guru.springframework.domain.*;
+import guru.springframework.dto.*;
+import guru.springframework.entities.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,14 +15,14 @@ class RecipeMapperTest {
     RecipeMapper mapper = RecipeMapper.INSTANCE;
 
     static Ingredient ingredient;
-    static IngredientCommand ingredientCommand;
+    static IngredientDTO ingredientDTO;
     static Recipe recipe;
-    static RecipeCommand recipeCommand;
+    static RecipeDTO recipeDTO;
     static Category category;
-    static CategoryCommand categoryCommand;
+    static CategoryDTO categoryDTO;
 
     static Note note;
-    static NoteCommand noteCommand;
+    static NoteDTO noteDTO;
 
     @BeforeAll
     static void setUp() {
@@ -59,65 +59,65 @@ class RecipeMapperTest {
         recipe.getIngredients().add(ingredient);
         recipe.getCategories().add(category);
 
-        // commands
-        categoryCommand = CategoryCommand
+        // dto
+        categoryDTO = CategoryDTO
                 .builder()
                 .id(1L)
                 .description("Test category")
                 .build();
 
-        ingredientCommand = IngredientCommand
+        ingredientDTO = IngredientDTO
                 .builder()
                 .id(1L)
                 .amount(BigDecimal.ONE)
-                .unitOfMeasure(new UnitOfMeasureCommand(1L, "Test unit"))
+                .unitOfMeasure(new UnitOfMeasureDTO(1L, "Test unit"))
                 .description("Test ingredient")
                 .build();
 
-        noteCommand = NoteCommand
+        noteDTO = NoteDTO
                 .builder()
                 .id(1L)
                 .recipeNotes("Test note")
                 .build();
 
-        recipeCommand = RecipeCommand
+        recipeDTO = RecipeDTO
                 .builder()
                 .id(1L)
                 .ingredients(new HashSet<>())
                 .categories(new HashSet<>())
                 .description("Test recipe")
-                .note(noteCommand)
+                .note(noteDTO)
                 .build();
 
-        recipeCommand.getIngredients().add(ingredientCommand);
-        recipeCommand.getCategories().add(categoryCommand);
+        recipeDTO.getIngredients().add(ingredientDTO);
+        recipeDTO.getCategories().add(categoryDTO);
     }
 
     @Test
-    void entityToCommand() {
-        RecipeCommand result = mapper.entityToCommand(recipe);
-        assertEquals(result.getId(), recipeCommand.getId());
+    void entityToDto() {
+        RecipeDTO result = mapper.entityToDto(recipe);
+        assertEquals(result.getId(), recipeDTO.getId());
         assertEquals(
                 result.getCategories().stream().findFirst().orElseThrow(RuntimeException::new).getId(),
-                recipeCommand.getCategories().stream().findFirst().orElseThrow(RuntimeException::new).getId()
+                recipeDTO.getCategories().stream().findFirst().orElseThrow(RuntimeException::new).getId()
         );
         assertEquals(
                 result.getNote().getId(),
-                recipeCommand.getNote().getId()
+                recipeDTO.getNote().getId()
         );
     }
 
     @Test
-    void commandToEntity() {
-        Recipe result = mapper.commandToEntity(recipeCommand);
+    void dtoToEntity() {
+        Recipe result = mapper.dtoToEntity(recipeDTO);
         assertEquals(result.getId(), result.getId());
         assertEquals(
                 result.getCategories().stream().findFirst().orElseThrow(RuntimeException::new).getId(),
-                recipeCommand.getCategories().stream().findFirst().orElseThrow(RuntimeException::new).getId()
+                recipeDTO.getCategories().stream().findFirst().orElseThrow(RuntimeException::new).getId()
         );
         assertEquals(
                 result.getNote().getId(),
-                recipeCommand.getNote().getId()
+                recipeDTO.getNote().getId()
         );
     }
 }

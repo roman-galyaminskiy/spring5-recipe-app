@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.UnitOfMeasureCommand;
-import guru.springframework.domain.UnitOfMeasure;
+import guru.springframework.dto.UnitOfMeasureDTO;
+import guru.springframework.entities.UnitOfMeasure;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,7 +10,7 @@ public interface UnitOfMeasureMapper {
 
     UnitOfMeasureMapper INSTANCE = Mappers.getMapper( UnitOfMeasureMapper.class );
 
-    UnitOfMeasureCommand entityToCommand(UnitOfMeasure entity);
+    UnitOfMeasureDTO entityToDto(UnitOfMeasure entity);
 
-    UnitOfMeasure commandToEntity(UnitOfMeasureCommand command);
+    UnitOfMeasure dtoToEntity(UnitOfMeasureDTO dto);
 }

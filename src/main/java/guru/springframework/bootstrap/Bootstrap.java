@@ -1,9 +1,9 @@
 package guru.springframework.bootstrap;
 
-import guru.springframework.domain.Difficulty;
-import guru.springframework.domain.Ingredient;
-import guru.springframework.domain.Note;
-import guru.springframework.domain.Recipe;
+import guru.springframework.entities.Difficulty;
+import guru.springframework.entities.Ingredient;
+import guru.springframework.entities.Note;
+import guru.springframework.entities.Recipe;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;

@@ -1,4 +1,4 @@
-package guru.springframework.commands;
+package guru.springframework.dto;
 
 import lombok.*;
 
@@ -7,9 +7,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoteCommand {
+public class NoteDTO {
 
     private Long id;
-    // private Recipe recipe;
     private String recipeNotes;
 }

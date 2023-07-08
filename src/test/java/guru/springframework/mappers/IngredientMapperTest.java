@@ -1,9 +1,9 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.IngredientCommand;
-import guru.springframework.commands.UnitOfMeasureCommand;
-import guru.springframework.domain.Ingredient;
-import guru.springframework.domain.UnitOfMeasure;
+import guru.springframework.dto.IngredientDTO;
+import guru.springframework.dto.UnitOfMeasureDTO;
+import guru.springframework.entities.Ingredient;
+import guru.springframework.entities.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ class IngredientMapperTest {
 
     static Ingredient ingredient;
 
-    static IngredientCommand ingredientCommand;
+    static IngredientDTO ingredientDTO;
 
     @BeforeAll
     static void setUp() {
@@ -29,24 +29,24 @@ class IngredientMapperTest {
                 .description("Test ingredient")
                 .build();
 
-        ingredientCommand = IngredientCommand
+        ingredientDTO = IngredientDTO
                 .builder()
                 .id(1L)
                 .amount(BigDecimal.ONE)
-                .unitOfMeasure(new UnitOfMeasureCommand(1L, "Test unit"))
+                .unitOfMeasure(new UnitOfMeasureDTO(1L, "Test unit"))
                 .description("Test ingredient")
                 .build();
     }
 
     @Test
-    void entityToCommand() {
-        IngredientCommand result = mapper.entityToCommand(ingredient);
-        assertEquals(result.getId(), ingredientCommand.getId());
+    void entityToDto() {
+        IngredientDTO result = mapper.entityToDto(ingredient);
+        assertEquals(result.getId(), ingredientDTO.getId());
     }
 
     @Test
-    void commandToEntity() {
-        Ingredient result = mapper.commandToEntity(ingredientCommand);
+    void dtoToEntity() {
+        Ingredient result = mapper.dtoToEntity(ingredientDTO);
         assertEquals(result.getId(), ingredient.getId());
     }
 }

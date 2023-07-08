@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.CategoryCommand;
-import guru.springframework.domain.Category;
+import guru.springframework.dto.CategoryDTO;
+import guru.springframework.entities.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,7 +10,7 @@ public interface CategoryMapper {
 
     CategoryMapper INSTANCE = Mappers.getMapper( CategoryMapper.class );
 
-    CategoryCommand entityToCommand(Category entity);
+    CategoryDTO entityToDto(Category entity);
 
-    Category commandToEntity(CategoryCommand command);
+    Category dtoToEntity(CategoryDTO dto);
 }

@@ -1,7 +1,7 @@
 package guru.springframework.mappers;
 
-import guru.springframework.commands.CategoryCommand;
-import guru.springframework.domain.Category;
+import guru.springframework.dto.CategoryDTO;
+import guru.springframework.entities.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ class CategoryMapperTest {
 
     CategoryMapper mapper = CategoryMapper.INSTANCE;
     static Category category;
-    static CategoryCommand categoryCommand;
+    static CategoryDTO categoryDTO;
     @BeforeEach
     void setUp() {
         // entites
@@ -21,8 +21,8 @@ class CategoryMapperTest {
                 .description("Test category")
                 .build();
 
-        // commands
-        categoryCommand = CategoryCommand
+        // dto
+        categoryDTO = CategoryDTO
                 .builder()
                 .id(1L)
                 .description("Test category")
@@ -30,15 +30,15 @@ class CategoryMapperTest {
     }
 
     @Test
-    void entityToCommand() {
-        CategoryCommand result = mapper.entityToCommand(category);
-        assertEquals(result.getId(), categoryCommand.getId());
-        assertEquals(result.getDescription(), categoryCommand.getDescription());
+    void entityToDto() {
+        CategoryDTO result = mapper.entityToDto(category);
+        assertEquals(result.getId(), categoryDTO.getId());
+        assertEquals(result.getDescription(), categoryDTO.getDescription());
     }
 
     @Test
-    void commandToEntity() {
-        Category result = mapper.commandToEntity(categoryCommand);
+    void dtoToEntity() {
+        Category result = mapper.dtoToEntity(categoryDTO);
         assertEquals(result.getId(), category.getId());
         assertEquals(result.getDescription(), category.getDescription());
     }

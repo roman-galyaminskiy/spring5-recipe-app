@@ -1,4 +1,4 @@
-package guru.springframework.domain;
+package guru.springframework.entities;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

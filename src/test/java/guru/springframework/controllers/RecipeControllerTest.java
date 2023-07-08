@@ -1,7 +1,7 @@
 package guru.springframework.controllers;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Recipe;
+import guru.springframework.dto.RecipeDTO;
+import guru.springframework.entities.Recipe;
 import guru.springframework.services.RecipeService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -53,10 +53,10 @@ class RecipeControllerTest {
     @Test
     public void getExistingRecipeForm() throws Exception {
         var recipeId = 1L;
-        var command = new RecipeCommand();
-        command.setId(recipeId);
+        var dto = new RecipeDTO();
+        dto.setId(recipeId);
 
-        when(recipeService.findCommandById(recipeId)).thenReturn(command);
+        when(recipeService.getDtoById(recipeId)).thenReturn(dto);
 
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
@@ -70,16 +70,15 @@ class RecipeControllerTest {
         var recipe = new Recipe();
         recipe.setId(recipeId);
 
-        when(recipeService.saveRecipeCommand(any())).thenReturn(recipe);
+        when(recipeService.saveRecipeDto(any())).thenReturn(recipe);
 
         mockMvc.perform(post("/recipe")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("id", "1")
-                .param("description", "test")
-        )
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name("redirect:/recipe/1/show"));
-
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "1")
+                        .param("description", "test")
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/1/show"));
     }
 
 }
