@@ -1,7 +1,6 @@
 package guru.springframework.controllers;
 
 import guru.springframework.dto.IngredientDTO;
-import guru.springframework.dto.RecipeDTO;
 import guru.springframework.entities.Ingredient;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
