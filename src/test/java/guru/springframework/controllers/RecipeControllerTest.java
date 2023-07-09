@@ -87,6 +87,10 @@ class RecipeControllerTest {
     public void testRecipeNotFound() throws Exception {
         when(recipeService.findById(any())).thenThrow(NotFoundException.class);
 
-        mockMvc.perform(get("/recipe/1/show")).andExpect(status().isNotFound());
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error"));
     }
+
+
 }
