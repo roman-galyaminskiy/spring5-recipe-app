@@ -3,6 +3,7 @@ package guru.springframework.controllers;
 import guru.springframework.dto.RecipeDTO;
 import guru.springframework.entities.Note;
 import guru.springframework.entities.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import org.hamcrest.Matchers;
@@ -80,5 +81,12 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe/" + recipeId + "/delete")).andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/"));
 
         verify(recipeService, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void testRecipeNotFound() throws Exception {
+        when(recipeService.findById(any())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show")).andExpect(status().isNotFound());
     }
 }

@@ -2,6 +2,7 @@ package guru.springframework.services.impl;
 
 import guru.springframework.dto.RecipeDTO;
 import guru.springframework.entities.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.mappers.RecipeMapper;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.RecipeService;
@@ -30,7 +31,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe findById(Long id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found!"));
+        return recipeRepository.findById(id).orElseThrow(() -> new NotFoundException("Recipe with " + id + " is not found"));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDTO getDtoById(Long id) {
         return recipeRepository.findById(id)
                 .map(recipe -> RecipeMapper.INSTANCE.entityToDto(recipe))
-                .orElseThrow(() -> new RuntimeException("Recipe not found!"));
+                .orElseThrow(() -> new NotFoundException("Recipe with " + id + " is not found"));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package guru.springframework.services.impl;
 
 import guru.springframework.entities.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,9 +9,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -50,4 +53,11 @@ class RecipeServiceImplTest {
 
         verify(recipeRepository, times(1)).deleteById(id);
     }
+
+    @Test
+    void recipeNotFound() {
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> recipeService.findById(1L));
+    }
+
 }
