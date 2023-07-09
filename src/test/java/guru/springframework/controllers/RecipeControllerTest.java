@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -89,6 +90,15 @@ class RecipeControllerTest {
 
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isNotFound())
+                .andExpect(view().name("error"));
+    }
+
+    @Test
+    public void testRecipeIdNumberFormatException() throws Exception {
+        when(recipeService.findById(any())).thenThrow(MethodArgumentTypeMismatchException.class);
+
+        mockMvc.perform(get("/recipe/1234/show"))
+                .andExpect(status().isBadRequest())
                 .andExpect(view().name("error"));
     }
 

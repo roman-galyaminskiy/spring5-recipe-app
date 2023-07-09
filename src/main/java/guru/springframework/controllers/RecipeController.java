@@ -69,17 +69,4 @@ public class RecipeController {
         modelAndView.addObject("exception", e);
         return modelAndView;
     }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ModelAndView badInputHandler(Exception e) {
-        log.error("Handling recipe MethodArgumentTypeMismatchException");
-        log.error(e.getMessage());
-        ModelAndView modelAndView = new ModelAndView();
-
-        modelAndView.setViewName("error");
-        modelAndView.addObject("title", "400 Bad request");
-        modelAndView.addObject("exception", e);
-        return modelAndView;
-    }
 }
