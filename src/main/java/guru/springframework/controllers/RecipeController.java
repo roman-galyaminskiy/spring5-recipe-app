@@ -4,19 +4,24 @@ import guru.springframework.dto.RecipeDTO;
 import guru.springframework.entities.Recipe;
 import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Objects;
 
 @Slf4j
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
 
+    public static final String RECIPE_FORM_URL = "/recipe/form";
     private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) {
@@ -32,7 +37,7 @@ public class RecipeController {
     @GetMapping("/new")
     String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeDTO());
-        return "/recipe/form";
+        return RECIPE_FORM_URL;
     }
 
     @GetMapping({"/{recipeId}/update"})
@@ -40,11 +45,18 @@ public class RecipeController {
         var dto = recipeService.getDtoById(id);
         log.info(dto.toString());
         model.addAttribute("recipe", dto);
-        return "/recipe/form";
+        return RECIPE_FORM_URL;
     }
 
     @PostMapping(path = {"/", ""})
-    String saveOrUpdate(@ModelAttribute RecipeDTO dto) {
+    String saveOrUpdate(@Valid  @ModelAttribute("recipe") RecipeDTO dto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(objectError -> log.warn(objectError.toString()));
+
+            return RECIPE_FORM_URL;
+        }
+
         log.info("saveOrUpdate");
         Recipe recipe = recipeService.saveRecipeDto(dto);
         log.info("redirect:/recipe/" + recipe.getId() + "/show");

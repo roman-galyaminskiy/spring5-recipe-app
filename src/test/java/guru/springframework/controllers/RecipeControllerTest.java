@@ -7,6 +7,7 @@ import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(RecipeController.class)
 class RecipeControllerTest {
 
+    public static final long RECIPE_ID = 1L;
     @MockBean
     RecipeService recipeService;
 
@@ -43,43 +45,78 @@ class RecipeControllerTest {
 
         when(recipeService.findById(recipeId)).thenReturn(recipe);
 
-        mockMvc.perform(get("/recipe/1/show")).andExpect(status().isOk()).andExpect(view().name("/recipe/show")).andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(recipeId))));
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/show"))
+                .andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(recipeId))));
     }
 
     @Test
     public void testGetNewRecipeForm() throws Exception {
-        mockMvc.perform(get("/recipe/new")).andExpect(status().isOk()).andExpect(view().name("/recipe/form")).andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(nullValue()))));
+        mockMvc.perform(get("/recipe/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/form"))
+                .andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(nullValue()))));
     }
 
     @Test
     public void testGetExistingRecipeForm() throws Exception {
-        var recipeId = 1L;
-        var dto = new RecipeDTO();
-        dto.setId(recipeId);
+        var dto = RecipeDTO.builder()
+                .id(RECIPE_ID)
+                .build();
 
-        when(recipeService.getDtoById(recipeId)).thenReturn(dto);
+        when(recipeService.getDtoById(RECIPE_ID)).thenReturn(dto);
 
-        mockMvc.perform(get("/recipe/1/update")).andExpect(status().isOk()).andExpect(view().name("/recipe/form")).andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(recipeId))));
+        mockMvc.perform(get("/recipe/" + RECIPE_ID + "/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/form"))
+                .andExpect(model().attribute("recipe", Matchers.hasProperty("id", is(RECIPE_ID))));
     }
 
     @Test
-    public void testPostRecipeForm() throws Exception {
-        var recipeId = 1L;
-        var recipe = new Recipe();
-        recipe.setId(recipeId);
+    public void testPostRecipeFormSuccess() throws Exception {
+        var recipe = Recipe.builder()
+                .id(RECIPE_ID)
+                .build();
 
         when(recipeService.saveRecipeDto(any())).thenReturn(recipe);
 
-        mockMvc.perform(post("/recipe").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "1").param("description", "test")).andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/recipe/" + recipeId + "/show"));
+        mockMvc.perform(post("/recipe")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "1")
+                        .param("prepTime", "1")
+                        .param("cookTime", "1")
+                        .param("servings", "1")
+                        .param("directions", "1")
+                        .param("description", "test"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/" + RECIPE_ID + "/show"));
+    }
+
+    @Test
+    public void testPostRecipeFormInvalidRecipe() throws Exception {
+        var recipe = new Recipe();
+        recipe.setId(RECIPE_ID);
+
+        when(recipeService.saveRecipeDto(any())).thenReturn(recipe);
+
+        mockMvc.perform(post("/recipe")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "1")
+                        .param("description", "test"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/form"));
     }
 
     @Test
     public void testDeleteRecipe() throws Exception {
-        var recipeId = 1L;
+        var recipeId = RECIPE_ID;
         var dto = new RecipeDTO();
         dto.setId(recipeId);
 
-        mockMvc.perform(get("/recipe/" + recipeId + "/delete")).andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/"));
+        mockMvc.perform(get("/recipe/" + recipeId + "/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
 
         verify(recipeService, times(1)).deleteById(anyLong());
     }
